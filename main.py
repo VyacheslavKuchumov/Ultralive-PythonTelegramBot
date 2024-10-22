@@ -3,7 +3,7 @@ vyachik_id = 1403125548
 import requests
 import json
 
-# Replace with your bot token and recipient's chat ID
+# # Replace with your bot token and recipient's chat ID
 
 from SECRET import TOKEN
 
@@ -16,7 +16,15 @@ def send_message(bot_token, chat_id, message):
     response = requests.post(url, data=params)
     return json.loads(response.text)
 
-# Example usage:
-message_text = "i dunno arab bruh спик руша or omericanmain"
-response = send_message(TOKEN, vera_id, message_text)
-print(response)
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+## Принимаем chat_id и message например с неактора
+@app.route("/notify", methods=['POST'])
+def notify_user_in_telegram():
+    data = request.get_json()
+    response = send_message(TOKEN, data['chat_id'], data['message'])
+    print(f"Received POST data: {data}")
+    return response, 200
