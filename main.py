@@ -1,23 +1,23 @@
-import ollama
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
-qwen = 'qwen2.5-coder:7b'
-mistral_nemo = "mistral-nemo:12b"
+from SECRET import TOKEN
 
-# response = ollama.chat(model=mistral_nemo, messages=[
-# {
-# 'role': 'user',
-# 'content': 'Why is the sky blue?',
-# },
-# ])
-#
-# print(response['message']['content'])
 
-jobNames = ["Врач терапевт", "Програмист на python"]
 
-jobGroups = ["Врачи", "Програмисты"]
-baseTask = "You have to assign a group to the job offer only by knowing it's name. ONLY answer with a group name. "
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
-for i in range(len(jobNames)):
-    promptik = f"{baseTask}\nDATA: job_offer_name={jobNames[i]} \njob_groups={jobGroups}"
-    response = ollama.generate(model=mistral_nemo, prompt=promptik)
-    print(jobNames[i], response['response'], sep=": ")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
+
+if __name__ == '__main__':
+    application = ApplicationBuilder().token(TOKEN).build()
+
+    start_handler = CommandHandler('start', start)
+    application.add_handler(start_handler)
+
+    application.run_polling()
