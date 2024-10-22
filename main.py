@@ -12,9 +12,12 @@ mistral_nemo = "mistral-nemo:12b"
 #
 # print(response['message']['content'])
 
-paragraphs = ["Распиши введение дипломной работы по прогнозированию востребованности профессий", "Распиши ТЗ дипломной работы по прогнозированию востребованности профессий"]
+jobNames = ["Врач терапевт", "Програмист на python"]
 
+jobGroups = ["Врачи", "Програмисты"]
+baseTask = "You have to assign a group to the job offer only by knowing it's name. ONLY answer with a group name. "
 
-for text in paragraphs:
-    response = ollama.generate(model=mistral_nemo, prompt=text)
-    print(response['response'])
+for i in range(len(jobNames)):
+    promptik = f"{baseTask}\nDATA: job_offer_name={jobNames[i]} \njob_groups={jobGroups}"
+    response = ollama.generate(model=mistral_nemo, prompt=promptik)
+    print(jobNames[i], response['response'], sep=": ")
