@@ -1,4 +1,4 @@
-vera_id = 1701329648
+# vera_id = 1701329648
 vyachik_id = 1403125548
 import requests
 import json
@@ -21,6 +21,10 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+@app.route("/", methods=['GET'])
+def test_page():
+    return 'Hello World'
+
 ## Принимаем chat_id и message например с неактора
 @app.route("/notify", methods=['POST'])
 def notify_user_in_telegram():
@@ -28,3 +32,6 @@ def notify_user_in_telegram():
     response = send_message(TOKEN, data['chat_id'], data['message'])
     print(f"Received POST data: {data}")
     return response, 200
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
